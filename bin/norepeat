@@ -35,8 +35,8 @@ sub parse_cmdline {
         'help|h'         => sub {
             print <<USAGE;
 Usage:
-  $0 [norepeat options] -- [command] [command options ...]
-  $0 --help
+  norepeat [norepeat options] -- [command] [command options ...]
+  norepeat --help
 Options:
   --key=s, -k
   --data-file=s, -f
