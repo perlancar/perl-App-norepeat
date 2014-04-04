@@ -165,7 +165,7 @@ sub record_cmd {
 }
 
 sub run_cmd {
-    die "No command specified\n" unless @ARGV;
+    do { warn "No command specified\n"; exit 99 } unless @ARGV;
     system @ARGV;
     $Exit_Code = $? >> 8;
 }
