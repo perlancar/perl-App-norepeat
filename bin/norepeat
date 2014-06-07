@@ -273,8 +273,19 @@ But with --key:
 =item * --period=STR, -p
 
 Set maximum period for repeat detection. The default is forever (never repeat if
-the same command has ever been executed). Can either be number +
-{sec,min,hour,day,month,year}, or {hourly,daily,monthly,yearly}.
+the same command has ever been executed). Can either be "number +
+{sec,min,hour,day,month,year}" to express elapsed period after the last
+execution, or "{hourly,daily,monthly,yearly}" to express no repetition before
+the named period (hour,day,month,year) changes.
+
+For example, if period is "2 hour" then subsequent invocation won't repeat
+commands until 2 hours have elapsed. In other words, command won't repeat until
+the next 2 hours.
+
+If period is "monthly", command won't repeat execution until the month changes
+(e.g. from June to July). If you execute the first command on June 3rd, command
+won't repeat until July 1st. The same thing would happen if you first executed
+the command on June 30th.
 
 When comparing, local times will be used.
 
