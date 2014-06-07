@@ -56,15 +56,16 @@ USAGE
     if ($Period) {
         if ($Period =~ /\A(\d+)\s*
                         (s|secs?|seconds?|mins?|minutes?|hours?|
-                            d|days?|mons?|months?|y|years?)\z/x
+                            d|days?|w|weeks?|mons?|months?|y|years?)\z/x
                     ) {
             my ($n, $unit) = ($1, $2);
             my $mult = $unit =~ /\A(s|secs?|seconds?)\z/ ? 1 :
                 $unit =~ /\A(mins?|minutes?)\z/ ? 60 :
-                    $unit =~ /\A(h|hours?)\z/ ? 3600 :
-                        $unit =~ /\A(d|days?)\z/ ? 24*3600 :
-                            $unit =~ /\A(mons?|months?)\z/ ? 30.5*24*3600 :
-                                $unit =~ /\A(y|years?)\z/ ? 365.25*24*3600 : 0;
+                $unit =~ /\A(h|hours?)\z/       ? 3600 :
+                $unit =~ /\A(d|days?)\z/        ? 24*3600 :
+                $unit =~ /\A(w|weeks?)\z/       ? 7*24*3600 :
+                $unit =~ /\A(mons?|months?)\z/  ? 30.5*24*3600 :
+                $unit =~ /\A(y|years?)\z/       ? 365.25*24*3600 : 0;
             $Calc_SEOP_Times = sub {
                 my ($t, $e) = @_;
                 ($Now, $t + $n * $mult);
@@ -83,6 +84,18 @@ USAGE
                 (
                     timelocal( 0,  0,  0, $e->[3], $e->[4], $e->[5]),
                     timelocal(59, 59, 23, $e->[3], $e->[4], $e->[5]),
+                );
+            };
+        } elsif ($Period eq 'weekly') {
+            $Calc_SEOP_Times = sub {
+                my ($t, $e) = @_;
+                # week starts on sunday (wday=0), so ends on the next sunday
+                my $wday = $e->[6];
+                my $t2 = $t + (7-$wday)*24*3600;
+                my $e2 = [localtime $t2];
+                (
+                    timelocal( 0,  0,  0, $e->[3] , $e->[4] , $e->[5] ),
+                    timelocal( 0,  0,  0, $e2->[3], $e2->[4], $e2->[5])-1,
                 );
             };
         } elsif ($Period eq 'monthly') {
@@ -150,6 +163,8 @@ sub read_data_file {
             $n++;
         } else {
             my ($t1, $t2) = $Calc_SEOP_Times->($time, \@time);
+            say "DEBUG: period = [".localtime($t1)." to [".localtime($t2)."]"
+                if $Debug;
             $n++ if $t1 <= $Now && $t2 >= $Now;
         }
     }
@@ -166,6 +181,7 @@ sub record_cmd {
 
 sub run_cmd {
     do { warn "No command specified\n"; exit 99 } unless @ARGV;
+    say "DEBUG: Executing command: ".join(" ", @ARGV) if $Debug;
     system @ARGV;
     $Exit_Code = $? >> 8;
 }
@@ -280,7 +296,8 @@ the named period (hour,day,month,year) changes.
 
 For example, if period is "2 hour" then subsequent invocation won't repeat
 commands until 2 hours have elapsed. In other words, command won't repeat until
-the next 2 hours.
+the next 2 hours. Note that a month is defined as 30.5 days and a year is
+defined as 365.25 days.
 
 If period is "monthly", command won't repeat execution until the month changes
 (e.g. from June to July). If you execute the first command on June 3rd, command
@@ -320,6 +337,18 @@ allow any repeats. 2 means allow repeat once (for a total of 2 executions).
 Otherwise exit code from command is returned.
 
 
+=head1 ENVIRONMENT
+
+=head2 DEBUG => bool
+
+If set to true will show debugging messages.
+
+=head2 NOW => int
+
+Set arbitrary time as the current time. Useful for debugging, and will only take
+effect under C<DEBUG>.
+
+
 =head1 DATA FILE
 
 Data file is a line-oriented text file, using labeled tab-separated value format
@@ -332,10 +361,6 @@ The rows are assumed to be sorted chronologically (increasing time).
 
 
 =head1 TODO
-
-More proper date calculation.
-
-Weekly period and C<n weeks> interval.
 
 
 =head1 SEE ALSO
