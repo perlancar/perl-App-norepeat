@@ -1,5 +1,11 @@
 Revision history for App-norepeat
 
+0.04    2014-10-07 (PERLANCAR)
+
+	- Bugfix: Add aliases --hourly, --daily, --weekly, --monthly,
+	  --yearly (like described already in doc).
+
+
 0.03    2014-06-07 (SHARYANTO)
 
         - Implement 'n weeks' and 'weekly' periods.
