@@ -32,6 +32,11 @@ sub parse_cmdline {
         'num|n=i'        => \$Num,
         'period|p=s'     => \$Period,
         'ignore-failure' => \$Ignore_Failure,
+        'hourly'         => sub { $Period = 'hourly' },
+        'daily'          => sub { $Period = 'daily' },
+        'weekly'         => sub { $Period = 'weekly' },
+        'monthly'        => sub { $Period = 'monthly' },
+        'yearly'         => sub { $Period = 'yearly' },
         'help|h'         => sub {
             print <<USAGE;
 Usage:
@@ -320,6 +325,26 @@ Set filename to record execution to. Defaults to C<~/norepeat.dat>.
 
 Allow (n-1) repeating during the same period. Defaults to 1, which means to not
 allow any repeats. 2 means allow repeat once (for a total of 2 executions).
+
+=item * --hourly
+
+Shortcut for C<--period hourly>.
+
+=item * --daily
+
+Shortcut for C<--period daily>.
+
+=item * --weekly
+
+Shortcut for C<--period weekly>.
+
+=item * --monthly
+
+Shortcut for C<--period monthly>.
+
+=item * --yearly
+
+Shortcut for C<--period yearly>.
 
 =back
 
