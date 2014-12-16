@@ -211,7 +211,7 @@ exit $Exit_Code;
 
 1;
 # ABSTRACT: Run commands, but not repeatedly
-# PODNAME: norepeat
+# PODNAME:
 
 =head1 SYNOPSIS
 
