@@ -61,7 +61,7 @@ USAGE
 
     if ($Period) {
         if ($Period =~ /\A(\d+)\s*
-                        (s|secs?|seconds?|mins?|minutes?|hours?|
+                        (s|secs?|seconds?|mins?|minutes?|h|hours?|
                             d|days?|w|weeks?|mons?|months?|y|years?)\z/x
                     ) {
             my ($n, $unit) = ($1, $2);
