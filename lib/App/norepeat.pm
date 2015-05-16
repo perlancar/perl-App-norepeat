@@ -9,4 +9,9 @@ package App::norepeat;
 
 See the command-line script L<norepeat>.
 
+
+=head1 SEE ALSO
+
+L<Sub::NoRepeat>
+
 =cut

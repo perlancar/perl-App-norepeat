@@ -1,5 +1,12 @@
 Revision history for App-norepeat
 
+0.05    2015-05-16 (PERLANCAR)
+
+	- No functional changes.
+
+	- [Bugfix] 2h was not allowed, it should be allowed like 2hour.
+
+
 0.04    2014-10-07 (PERLANCAR)
 
 	- Bugfix: Add aliases --hourly, --daily, --weekly, --monthly,
