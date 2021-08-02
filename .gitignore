@@ -2,3 +2,4 @@ App-norepeat-*
 .build
 *~
 nytprof*
+.DS_Store
